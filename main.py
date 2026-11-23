@@ -42,6 +42,16 @@ def main() -> int:
     # Exact bytes: the emoji alone, no newline, no trailing space.
     with open(path, "w", encoding="utf-8", newline="") as f:
         f.write(EMOJI)
+    # Verify the written file on re-read: byte-exactly the emoji, 4 bytes.
+    with open(path, "rb") as f:
+        written = f.read()
+    if written != EMOJI.encode("utf-8"):
+        print(
+            f"error: entry.txt is not byte-exact {EMOJI.encode('utf-8')!r}: "
+            f"got {written!r}",
+            file=sys.stderr,
+        )
+        return 1
     return 0
 
 
